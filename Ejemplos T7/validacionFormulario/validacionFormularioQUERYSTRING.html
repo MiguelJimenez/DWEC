@@ -1,0 +1,69 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Validacion de formulario</title>
+
+<script type="text/javascript">
+
+var peticion_http = null;
+ 
+function crea_query_string() {
+  var fecha = document.getElementById("fecha");
+  var cp = document.getElementById("codigo");
+  var telefono = document.getElementById("telefono");
+ 
+  return "fecha_nacimiento=" + encodeURIComponent(fecha.value) +
+         "&codigo_postal=" + encodeURIComponent(cp.value) +
+         "&telefono=" + encodeURIComponent(telefono.value) +
+         "&nocache=" + Math.random();
+}
+ 
+function valida() {
+  if(window.XMLHttpRequest) {
+    peticion_http= new XMLHttpRequest(); 
+  }
+  else if(window.ActiveXObject) {
+    peticion_http= new ActiveXObject("Microsoft.XMLHTTP");
+  } 
+
+    peticion_http.onreadystatechange = procesaRespuesta;
+    peticion_http.open("POST", "http://localhost/AJAX/validacionFormulario.php");
+ 
+    peticion_http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    var query_string = crea_query_string();
+	alert(query_string);
+	peticion_http.send(query_string);
+  }
+
+ 
+function procesaRespuesta() {
+  if(peticion_http.readyState == 4) {
+    if(peticion_http.status == 200) {
+      document.getElementById("respuesta").innerHTML = peticion_http.responseText;
+    }
+  }
+}
+
+</script>
+</head>
+<body>
+
+
+<form>
+  <label for="fecha_nacimiento">Fecha de nacimiento:</label>
+  <input type="text" id="fecha" name="fecha" /><br/>
+ 
+  <label for="codigo_postal">Codigo postal:</label>
+  <input type="text" id="codigo" name="codigo" /><br/>
+ 
+  <label for="telefono">Telefono:</label>
+  <input type="text" id="telefono" name="telefono" /><br/>
+ 
+  <input type="button" value="Validar datos" onclick="valida();" />
+</form>
+ 
+<div id="respuesta"></div>
+
+
+</body>
+</html>

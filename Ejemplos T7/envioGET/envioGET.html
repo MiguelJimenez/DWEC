@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Ejercicio 13 - Comprobar disponibilidad del login</title>
+ 
+<script type="text/javascript">
+
+var peticion_http = null;
+ 
+function comprobar() {
+  var login = document.getElementById("login").value;
+
+  if (window.XMLHttpRequest) {
+    return new XMLHttpRequest(); 
+  } else if (window.ActiveXObject) {
+    return new ActiveXObject("Microsoft.XMLHTTP"); 
+  } 
+
+  if(peticion_http) {
+    peticion_http.onreadystatechange = procesaRespuesta;
+    peticion_http.open("GET", "http://localhost/envioGET/envioGET.php?login"+login);
+ 
+    peticion_http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    peticion_http.send(null);
+  }
+}
+ 
+function procesaRespuesta() {
+  if(peticion_http.readyState == 4) {
+    if (peticion_http.status == 200) {
+      
+            document.getElementById("respuesta").innerHTML = peticion_http.responseText;
+      }
+     }
+  }
+</script>
+</head>
+ 
+<body>
+<h1>Enviar login</h1>
+<form>
+  <label for="login">Nombre de usuario:</label>
+  <input type="text" name="login" id="login" />
+  <a id="comprobar" href="#" onclick="comprobar();">Comprobar disponibilidad...</a>
+</form>
+ 
+<div id="respuesta"></div>
+ 
+</body>
+</html>

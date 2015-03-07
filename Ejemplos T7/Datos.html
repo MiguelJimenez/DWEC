@@ -1,0 +1,39 @@
+<html> 
+    <head> <title>Hola Mundo con AJAX</title> 
+	
+    <script type="text/javascript">  
+     
+    function obtenerDatosServidor(origen, elemento){
+	
+	if(window.XMLHttpRequest) { 
+	objetoXHR = new XMLHttpRequest(); 
+    } else if(window.ActiveXObject) { 
+	objetoXHR = new ActiveXObject("Microsoft.XMLHTTP"); } 
+	
+     var objeto_destino = document.getElementById(elemento);
+	 objetoXHR.onreadystatechange = respuesta;
+     objetoXHR.open("GET", origen); 
+     objetoXHR.send(null); 
+          
+    function respuesta(){
+	
+     if(objetoXHR.readyState == 4) { 
+	 
+	if(objetoXHR.status == 200) { 
+		objeto_destino.innerHTML=objetoXHR.responseText;}  
+    } 
+	}
+   }
+</script>
+
+</head> 
+<body>
+<form>
+ <input type = "button" value = "Buscar información" onclick = "obtenerDatosServidor('http://localhost/AJAX/holamundo.txt', 'dest');"/>
+</form>
+ <div id="dest">
+  <p>La información aparecerá aquí</p> 
+ </div> 
+
+</body> 
+</html>

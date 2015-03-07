@@ -1,0 +1,82 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Muestra datos de la petición</title>    
+
+<script type="text/javascript">
+  window.onload = function() {
+    // Cargar en el input text la URL de la página
+    var recurso = document.getElementById('recurso');
+    recurso.value = location.href;
+ 
+    // Cargar el recurso solicitado cuando se pulse el botón MOSTRAR CONTENIDOS
+    document.getElementById('enviar').onclick = cargaContenido;
+  }
+ 
+  function cargaContenido() {
+   // Instanciar objeto XMLHttpRequest
+    if(window.XMLHttpRequest) {
+      peticion = new XMLHttpRequest();
+    }
+    else {
+      peticion = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+ 
+    // Preparar función de respuesta
+    peticion.onreadystatechange = muestraContenido;
+ 
+    // Realizar petición
+    var recurso = document.getElementById('recurso').value;
+    peticion.open('GET', recurso);
+    peticion.send(null);
+  }
+ 
+  // Función de respuesta
+  function muestraContenido() {
+    var estados = document.getElementById('estados');
+    estados.innerHTML = peticion.readyState;
+ 
+    if(peticion.readyState == 4) {
+      if(peticion.status == 200) {
+        var contenidos = document.getElementById('contenidos');
+        contenidos.innerHTML = peticion.responseText;
+      }
+      muestraCabeceras();
+      muestraCodigoEstado();
+    }
+  }
+ 
+  function muestraCabeceras() {
+    var cabeceras = document.getElementById('cabeceras');
+    cabeceras.innerHTML = peticion.getAllResponseHeaders();
+  }
+ 
+  function muestraCodigoEstado() {
+    var codigo = document.getElementById('codigo');
+    codigo.innerHTML = peticion.status + "<br/>" + peticion.statusText;        
+  }
+</script>
+</head>
+<body>
+<form action="#">
+  URL: <input type="text" id="recurso" size="70" />
+  <input type="button" id="enviar" value="Mostrar contenidos" />
+</form>
+ 
+<div id="principal">
+  <h2>Contenidos del archivo:</h2>
+  <div id="contenidos"></div>
+ 
+  <h2>Cabeceras HTTP de la respuesta del servidor:</h2>
+  <div id="cabeceras"></div>
+</div>
+ 
+<div id="secundario">
+  <h2>Estados de la petición:</h2>
+  <div id="estados"></div>
+ 
+  <h2>Código de estado:</h2>
+  <div id="codigo"></div>
+</div>
+</body>
+</html>
