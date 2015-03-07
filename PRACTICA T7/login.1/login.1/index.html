@@ -1,0 +1,45 @@
+<html>
+	<head>
+		<script type="text/javascript">
+			function comprobar(str)
+			{
+				var ajax = null;
+				if (str.length==0)
+				{ 
+				  document.getElementById("txtHint").innerHTML="";
+				  return;
+				}
+			  	if (window.XMLHttpRequest)
+				{
+				  ajax=new XMLHttpRequest();
+				}
+				else if (window.ActiveXObject)
+				{
+				  ajax=new ActiveXObject("Microsoft.XMLHTTP");
+				}
+			  	ajax.onreadystatechange=function()
+				{
+				  if (ajax.readyState==4)
+				  {
+				  	if(ajax.status==200)
+					 {
+					 document.getElementById("txtHint").innerHTML=ajax.responseText;
+					 }
+				  }
+				}
+				  ajax.open("GET","validar.php?u="+str,true);
+				  ajax.send();
+			}
+		
+		</script>
+	</head>
+	<body>	
+		<h3>Formulario de acceso</h3>
+		<form action="">
+			Elige un usuario: <input type="text" id="txt1" style="border:0px solid black;-webkit-box-shadow:0px 0px 15px rgba(0,0,0,0.5);background:rgba(255,255,255,0.95);"/>
+
+			<button onclick="comprobar(this.value)">Enviar</button>
+		</form>
+		<div id="txtHint"></div>
+	</body>
+</html>
